@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Owin;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
@@ -20,5 +21,14 @@ namespace WebHookTFS
                 defaults: new { id = RouteParameter.Optional }
             );
         }
+        //public static void Configuration(IAppBuilder app)
+        //{
+        //    var httpConfiguration = new HttpConfiguration();
+        //    httpConfiguration.MapHttpAttributeRoutes();
+
+        //    httpConfiguration.InitializeReceiveVstsWebHooks();
+
+        //    app.UseWebApi(httpConfiguration);
+        //}
     }
 }
