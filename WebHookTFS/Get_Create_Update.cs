@@ -56,7 +56,7 @@ namespace WebHookTFS
                 public Boolean suppressNotifications { get; set; }
                 //public WorkItemExpand $expand{ get; set; }
 
-                // public string api-version { get; set; }
+                //public string api-version { get; set; }
 
             }
 

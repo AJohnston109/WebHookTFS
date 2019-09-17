@@ -135,6 +135,7 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="App_Start\Startup.cs" />
+    <Compile Include="RevisionWrapper.cs" />
     <Compile Include="WebHook.cs" />
   </ItemGroup>
   <ItemGroup>
