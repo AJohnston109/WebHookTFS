@@ -2,9 +2,45 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Threading.Tasks;
+using Microsoft.TeamFoundation.WorkItemTracking.WebApi;
+using Microsoft.TeamFoundation.WorkItemTracking.WebApi.Models;
+using Newtonsoft.Json;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
+using System.Threading.Tasks;
+using System.Web.Http;
+//using Microsoft.VisualStudio.Services.Client;
+using Microsoft.VisualStudio.Services.Common;
+using Microsoft.VisualStudio.Services.WebApi;
 
 namespace WebHookTFS
 {
+    //class Program
+    //{
+    //    static int Main(string[] args)
+    //    {
+    //        Uri collectionUri = (args.Length < 1) ?
+    //            new Uri("http://server:8080/TFS/") : new Uri(args[0]);
+    //        TfsTeamProjectCollection tpc = new TfsTeamProjectCollection(collectionUri);
+    //        WorkItemStore workItemStore = tpc.GetService<WorkItemStore>();
+    //        Project teamProject = workItemStore.Projects["MyProject"];
+    //        WorkItemType workItemType = teamProject.WorkItemTypes["Product Backlog Item"];
+
+    //        WorkItem PBI = new WorkItem(workItemType);
+
+    //        PBI.Title = "TITLE GOES HERE";
+    //        PBI.Description = "DESCRIPTION GOES HERE";
+    //        PBI.Fields["Issue ID"].Value = "999999";
+
+
+    //        PBI.Save();
+    //        return (PBI.Id);
+
+    //    }
+    //}
     public class Get_Create_Update
     {
         public class Create_Delete
@@ -26,13 +62,16 @@ namespace WebHookTFS
                 public string Assigned_to { get; set; }
                 public int Effort { get; set; }
 
+
             }
+
             public class Create
             {
                 public string from { get; set; }
                // public Operation op { get; set; }
                 public string path { get; set; }
                 public object value { get; set; }
+                
 
             }
             public class Get_Item
@@ -59,6 +98,7 @@ namespace WebHookTFS
                 //public string api-version { get; set; }
 
             }
+
 
         }
     }
