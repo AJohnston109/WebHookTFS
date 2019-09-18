@@ -1,13 +1,13 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Http;
+using System.Web.Http.ModelBinding;
 
 namespace WebHookTFS
 {
@@ -155,7 +155,7 @@ namespace WebHookTFS
         }
 
         [HttpPatch]
-        public static async void CreateWorkItem(int WiId)
+        public static void CreateWorkItem(int WiId)
         {
             var username = "SA";
             var password = "Jumbotron";
@@ -171,6 +171,8 @@ namespace WebHookTFS
                 //var personalAccessToken = String.Empty;
                 using (HttpClient client = new HttpClient())
                 {
+                    //if (!ModelState.IsValid)
+                    //    throw new HttpResponseException(HttpStatusCode.BadRequest);
                     client.DefaultRequestHeaders.Accept.Add(
                     new MediaTypeWithQualityHeaderValue("application/json-patch+json"));
 
@@ -196,6 +198,8 @@ namespace WebHookTFS
                         string ResponseContent = await
                         response.Content.ReadAsStringAsync();
                     }
+                    if (WiId == null)
+                        throw new HttpResponseException(HttpStatusCode.NotFound);
                 }
             }
             catch (Exception ex)
