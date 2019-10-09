@@ -247,6 +247,7 @@ namespace WebHookTFS
                     Encoding.UTF8, "application/json-patch+json");
                     //var param = "abc123";
                     var url = $"https://ndi-tfs.visualstudio.com/Web%20Hook/_apis/wit/workitems/{id}";
+                                
                     //https://ndi-tfs.visualstudio.com/Web%20Hook/_apis/wit/workitems?ids={id}&api-version=5.1
                     //process the response stream
                     using (HttpResponseMessage response = await client.PatchAsync(url, wiPostDataContent))
