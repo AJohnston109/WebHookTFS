@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
 //using Microsoft.VisualStudio.Services.Client;
-using System.Threading.Tasks;
+using Microsoft.TeamFoundation.Framework.Client;
 using Microsoft.TeamFoundation.WorkItemTracking.Client;
 using Microsoft.TeamFoundation.WorkItemTracking.WebApi;
 using Microsoft.TeamFoundation.WorkItemTracking.WebApi.Models;
@@ -37,40 +37,39 @@ namespace WebHookTFS
             return await client.SendAsync(request);
         }
 
-        private static object client;
+        //private static object client;
         public class WorkItemDetails
         {
             public string id;
             public string rev;
             public IDictionary<string, string> fields;
-            public string Url;
+            public string url;
         }
 
         [HttpGet]
-        public static async void GetProjects(string username, string password, int WiId)
+        public static async Task GetProjects()
         {
             try
             {
-                Console.ReadKey();
+                var personalAccessToken = "yggseimvsboxrc3rvodr4dzshnc6cch6shcyavjrqxxbydb6geda";
+                //Console.ReadKey();
                 //var personalAccessToken = String.Empty;
                 using (HttpClient client = new HttpClient())
                 {
-                    client.BaseAddress = new Uri("https://ndi-tfs.visualstudio.com/VISCE");  
-                    client.DefaultRequestHeaders.Accept.Clear();
+                    //client.BaseAddress = new Uri("https://ndi-tfs.visualstudio.com");  
+                    //client.DefaultRequestHeaders.Accept.Clear();
                     client.DefaultRequestHeaders.Accept.Add(
                     new MediaTypeWithQualityHeaderValue("application/json"));
 
                     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic",
                     Convert.ToBase64String(
                     System.Text.ASCIIEncoding.ASCII.GetBytes(
-                    string.Format("{0}:{1}:{2}", "", username, password, WiId))));
+                    string.Format("{0}:{1}", "", personalAccessToken))));
                     //var param = "abc123";
-                    string url = $"https://ndi-tfs.visualstudio.com/Web%20Hook/_apis/wit/workitems/$Product%20Backlog%20Item?api-version=5.1";
                     //process the response stream
                     using (HttpResponseMessage response = await client.GetAsync(
                         "https://ndi-tfs.visualstudio.com/Web%20Hook/_apis/wit/workitems/$Product%20Backlog%20Item?api-version=5.1"
                         ))
-
                     {
                         response.EnsureSuccessStatusCode();
                         string responseBody = await response.Content.ReadAsStringAsync();
@@ -85,16 +84,12 @@ namespace WebHookTFS
             }
         }
 
-        internal static void GetProjects()
-        {
-            throw new NotImplementedException();
-        }
-
         [HttpGet]
-        public static async void GetWorkItem(string username, string password, int WiId)
+        public static async void GetWorkItem(string username, string password, int id)
         {
             try
             {
+                var personalAccessToken = "yggseimvsboxrc3rvodr4dzshnc6cch6shcyavjrqxxbydb6geda";
                 Console.ReadKey();
                 //var personalAccessToken = String.Empty;
                 using (HttpClient client = new HttpClient())
@@ -104,12 +99,12 @@ namespace WebHookTFS
                     //The resulting string can then be provided as an HTTP header in the format:
                     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(
                            Encoding.ASCII.GetBytes(
-                           string.Format("{0}:{1}:{2}", username, password, WiId))));
+                           string.Format("{0}:{1}:{2}", username, personalAccessToken, id))));
 
                     //var param = "abc123";
                     //var url = $"https://ndi-tfs.visualstudio.com/Web%20Hook/_apis/wit/workitems?ids={id}&api-version=5.1";
                     //process the response stream
-                    string url = $"https://ndi-tfs.visualstudio.com/Web%20Hook/_apis/wit/workitems?ids={WiId}&api-version=5.1";
+                    string url = $"https://ndi-tfs.visualstudio.com/Web%20Hook/_apis/wit/workitems/$Product%20Backlog%20Item?api-version=5.1";
 
                     using (HttpResponseMessage response = client.GetAsync(url).Result)
                     {
@@ -131,10 +126,11 @@ namespace WebHookTFS
             }
         }
         [HttpGet]
-        public static async void GetBacklog(string username, string password, int WiId)
+        public static async void GetBacklog(string username, int id)
         {
             try
             {
+                var personalAccessToken = "yggseimvsboxrc3rvodr4dzshnc6cch6shcyavjrqxxbydb6geda";
                 Console.ReadKey();
                 //var personalAccessToken = String.Empty;
                 using (HttpClient client = new HttpClient())
@@ -145,12 +141,12 @@ namespace WebHookTFS
                     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic",
                     Convert.ToBase64String(
                     System.Text.ASCIIEncoding.ASCII.GetBytes(
-                    string.Format("{0}:{1}:{2}", username, password, WiId))));
+                    string.Format("{0}:{1}:{2}", username, personalAccessToken, id))));
 
                     //process the response stream
                     using (HttpResponseMessage response = await client.GetAsync(
                         $"https://ndi-tfs.visualstudio.com/Web%20Hook/_apis/wit/backlogs/backlog/VISCE%20Team/Features&api-version=5.1"))
-                    //  $"https://ndi-tfs.visualstudio.com/Web%20Hook/_apis/wit/workitems?ids={WiId}&api-version=5.1"
+                    //  $"https://ndi-tfs.visualstudio.com/Web%20Hook/_apis/wit/workitems?ids={id}&api-version=5.1"
                     {
                         response.EnsureSuccessStatusCode();
                         string responseBody = await response.Content.ReadAsStringAsync();
@@ -165,21 +161,21 @@ namespace WebHookTFS
             }
         }
 
+
+        //public static void CreateWorkItem(int WiId)
+        //{
+        //    var username = "A.Jojhnston@nditech.com";
+        //    var password = "Aj0hnston109";
+        //    DoCreateWorkItem(username, password, WiId);
+        //}
+
         [HttpPatch]
-        public static void CreateWorkItem(int WiId)
-        {
-            var username = "user";
-            var password = "Jumb0tron!";
-            DoCreateWorkItem(username, password, WiId);
-        }
-
-
-        private static async void DoCreateWorkItem(string username, string password, int WiId)
+        private static async void CreateWorkItem(string username, string password)
         {
             try
             {
-                //Console.ReadKey();
-                //var personalAccessToken = String.Empty;
+                var type = "Product%20Backlog%20Item";
+                var personalAccessToken = "yggseimvsboxrc3rvodr4dzshnc6cch6shcyavjrqxxbydb6geda";
                 using (HttpClient client = new HttpClient())
                 {
                     //if (!ModelState.IsValid)
@@ -190,7 +186,7 @@ namespace WebHookTFS
                     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic",
                     Convert.ToBase64String(
                     System.Text.Encoding.ASCII.GetBytes(
-                    string.Format("{0}:{1}:{2}", username, password, WiId))));
+                    string.Format("{0}:{1}", username, password))));
 
                     WorkItemPostData wiPostData = new WorkItemPostData();
                     wiPostData.op = "add";
@@ -200,17 +196,15 @@ namespace WebHookTFS
                     wiPostData };
                     string wiPostDataString = JsonConvert.SerializeObject(wiPostDataArr);
                     HttpContent wiPostDataContent = new StringContent(wiPostDataString, Encoding.UTF8, "application/json-patch+json");
-                    string Url = $"https://ndi-tfs.visualstudio.com/Web%20Hook/__apis/wit/workitems/create/Product%20Backlog%20Item";
-                    //"https://ndi-tfs.visualstudio.com/Web%20Hook/_apis/wit/workitems/$Product%20Backlog%20Item?api-version=5.1";
+                    string url = $"https://ndi-tfs.visualstudio.com/Web%20Hook/_apis/wit/workitems/${type}";
+                    //"https://ndi-tfs.visualstudio.com/Web%20Hook/_apis/wit/workitems/create/Product%20Backlog%20Item";
 
-                    using (HttpResponseMessage response = client.PatchAsync(Url, wiPostDataContent).Result)
+                    using (HttpResponseMessage response = client.PatchAsync(url, wiPostDataContent).Result)
                     {
                         response.EnsureSuccessStatusCode();
                         string ResponseContent = await
                         response.Content.ReadAsStringAsync();
                     }
-                    if (WiId == null)
-                        throw new HttpResponseException(HttpStatusCode.NotFound);
                 }
             }
             catch (Exception ex)
@@ -229,10 +223,11 @@ namespace WebHookTFS
 
 
         [HttpPatch]
-        public static async Task UpdateWorkItem(string username, string password, int WiId)
+        public static async Task UpdateWorkItem(string username, int id)
         {
             try
             {
+                var personalAccessToken = "yggseimvsboxrc3rvodr4dzshnc6cch6shcyavjrqxxbydb6geda";
                 Console.ReadKey();
                 //var personalAccessToken = String.Empty;
                 using (HttpClient client = new HttpClient())
@@ -240,7 +235,7 @@ namespace WebHookTFS
                     client.DefaultRequestHeaders.Authorization = new
                     AuthenticationHeaderValue("Basic", Convert.ToBase64String(
                     System.Text.ASCIIEncoding.ASCII.GetBytes(
-                    string.Format("{0}:{1}:{2}", username, password, WiId))));
+                    string.Format("{0}:{1}:{2}", username, personalAccessToken, id))));
 
                     WorkItemPostData wiPostData = new WorkItemPostData();
                     wiPostData.op = "replace";
@@ -251,8 +246,8 @@ namespace WebHookTFS
                     HttpContent wiPostDataContent = new StringContent(wiPostDataString,
                     Encoding.UTF8, "application/json-patch+json");
                     //var param = "abc123";
-                    var url = $"https://ndi-tfs.visualstudio.com/Web%20Hook/_apis/wit/workitems?ids={WiId}&api-version=5.1";
-                    //https://ndi-tfs.visualstudio.com/VISCE/_apis/wit/workitems/7842
+                    var url = $"https://ndi-tfs.visualstudio.com/Web%20Hook/_apis/wit/workitems/{id}";
+                    //https://ndi-tfs.visualstudio.com/Web%20Hook/_apis/wit/workitems?ids={id}&api-version=5.1
                     //process the response stream
                     using (HttpResponseMessage response = await client.PatchAsync(url, wiPostDataContent))
                     {
@@ -276,3 +271,10 @@ namespace WebHookTFS
         //https://ndi-tfs.visualstudio.com/Web%20Hook/_apis/wit/workitemtypes
     }
 }
+//enter to debug in postman
+//http://localhost:55462/Webhooks
+//to register your app
+//https://vsooauthtest.azurewebsites.net/
+//WebHook Token Password: yggseimvsboxrc3rvodr4dzshnc6cch6shcyavjrqxxbydb6geda
+//System.LinkTypes.Dependency\
+//System.LinkTypes.Related\

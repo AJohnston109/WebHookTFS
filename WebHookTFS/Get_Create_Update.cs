@@ -10,7 +10,6 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
-using System.Threading.Tasks;
 using System.Web.Http;
 //using Microsoft.VisualStudio.Services.Client;
 using Microsoft.VisualStudio.Services.Common;
@@ -71,8 +70,6 @@ namespace WebHookTFS
                // public Operation op { get; set; }
                 public string path { get; set; }
                 public object value { get; set; }
-                
-
             }
             public class Get_Item
             {
